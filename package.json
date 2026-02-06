@@ -1,0 +1,18 @@
+{
+  "name": "yapper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  "install:backend": "npm install --prefix Backend",
+  "install:frontend": "npm install --prefix Frontend",
+
+  "build:frontend": "npm run build --prefix Frontend",
+
+  "build": "npm run install:backend && npm run install:frontend && npm run build:frontend"
+},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
