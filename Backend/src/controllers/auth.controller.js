@@ -1,16 +1,18 @@
 import User from "../../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { generateToken } from "../lib/utils.js";
 
  export const signup = async (req,res)=>{
+    console.log("req.body", req.body);
+    try{
+        //check if all feilds are filled or not
     const{fullName, email, password} =req.body;
-//check if all feilds are filled or not
-try{
-if(!fullName, ! email, !password){
+if(!fullName || ! email || !password){
     return res.status(400).json({ message:"all feilds are requires"});
 }
 if(password.length < 6){
-    res.status(400).json({ message: "Passwords must be at least 6 characters"});
+   return res.status(400).json({ message: "Passwords must be at least 6 characters"});
 }
 //chech if email is vaild 
 const regex =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -36,6 +38,14 @@ password: hashedPassword
 
 //jwt 
 if(newUser){
+    await newUser.save();
+    generateToken(newUser._id, res);
+    res.status(201).json({
+        _id: newUser._id,
+        fullName: newUser.fullName,
+        email: newUser.email,
+        profilePic: newUser.profilePic,
+    });
  
 }else{
     res.status(400).json({message: "invaild user data"})
