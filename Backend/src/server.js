@@ -10,7 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config();
 const PORT = process.env.PORT || 3000;
-
+app.use (express.json()); //req.body
 //routes
 app.use('/api/auth', authRoutes); 
 app.use('/api/messages',messageRoute); 
