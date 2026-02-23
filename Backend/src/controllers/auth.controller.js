@@ -1,8 +1,7 @@
 import User from "../../models/User.js";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../lib/utils.js";
-import { dotenv } from 'dotenv';
-dotenv.config();  
+import { ENV } from "../lib/env.js";
 import{ sendWelcomeEmail} from "../emails/emailHandler.js"
  export const signup = async (req,res)=>{
     console.log("req.body", req.body);
@@ -18,7 +17,7 @@ if(password.length < 6){
 //check if email is vaild 
 const regex =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 if(!regex.test(email)){
-    return res.status(400).json({ message:" Invaild email format"});
+    return res.status(400).json({ message:" Invalid email format"});
 }
 //chech if user already exist or not
 const existingUser= await User.findOne({email});
@@ -51,7 +50,7 @@ if(newUser){
 
  //send welcome email
  try {
-    await sendWelcomeEmail( savedUser.email, savedUser.fullName, process.env.clientURL)
+    await sendWelcomeEmail( savedUser.email, savedUser.fullName,ENV.CLIENT_URL )
  } catch (error) {
     console.log(" failed to send welcome email");
  }
