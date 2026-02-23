@@ -1,20 +1,21 @@
 import User from "../../models/User.js";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import { generateToken } from "../lib/utils.js";
-
+import { dotenv } from 'dotenv';
+dotenv.config();  
+import{ sendWelcomeEmail} from "../emails/emailHandler.js"
  export const signup = async (req,res)=>{
     console.log("req.body", req.body);
     try{
-        //check if all feilds are filled or not
+        //check if all fields are filled or not
     const{fullName, email, password} =req.body;
 if(!fullName || ! email || !password){
-    return res.status(400).json({ message:"all feilds are requires"});
+    return res.status(400).json({ message:"all fields are requires"});
 }
 if(password.length < 6){
    return res.status(400).json({ message: "Passwords must be at least 6 characters"});
 }
-//chech if email is vaild 
+//check if email is vaild 
 const regex =  /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 if(!regex.test(email)){
     return res.status(400).json({ message:" Invaild email format"});
@@ -38,15 +39,24 @@ password: hashedPassword
 
 //jwt 
 if(newUser){
-    await newUser.save();
-    generateToken(newUser._id, res);
+   const savedUser=  await newUser.save();
+    generateToken(savedUser._id, res);
     res.status(201).json({
         _id: newUser._id,
         fullName: newUser.fullName,
         email: newUser.email,
         profilePic: newUser.profilePic,
     });
- 
+
+
+ //send welcome email
+ try {
+    await sendWelcomeEmail( savedUser.email, savedUser.fullName, process.env.clientURL)
+ } catch (error) {
+    console.log(" failed to send welcome email");
+ }
+
+
 }else{
     res.status(400).json({message: "invaild user data"})
 }
