@@ -9,7 +9,7 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const PORT = ENV.PORTPORT || 3000;
+const PORT = ENV.PORT || 3000;
 app.use (express.json()); //req.body
 //routes
 app.use('/api/auth', authRoutes); 
