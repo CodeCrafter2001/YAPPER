@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import { generateToken } from "../lib/utils.js";
 import { ENV } from "../lib/env.js";
 import{ sendWelcomeEmail} from "../emails/emailHandler.js"
+import  cloudinary from "../lib/cloudinary.js";
+
  export const signup = async (req,res)=>{
     console.log("req.body", req.body);
     try{
@@ -123,5 +125,18 @@ try{
 
 //update profile controller
 export const updateProfile= async(req,res)=>{
-         
+      try {
+        const {profilePic}= req.body;
+          if(!profilePic) res.status(400).json({message:"ProfilePic is required"});
+          const userId= req.user._id;
+          const uploadResponse= await cloudinary.uploader.upload(profilePic); 
+        const updatedUser= await User.findByIdAndUpdate(User,
+            {profilePic: uploadResponse.secure_url},
+            {new:true}
+        );
+        res.status(200).json({message: updatedUser})
+      } catch (error) {
+        console.log("error in update profile:", error);
+        res.status(500).json({message:"Internal server error"}); 
+      }    
 }
