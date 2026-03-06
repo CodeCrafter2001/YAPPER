@@ -17,7 +17,7 @@ export const getAllContacts = async (req, res) => {
   }
 };
 
-//get messageByUserId route
+//get messageByUserId 
 export const getMessagesByUserId = async (req, res) => {
   try {
     const myId = req.user._id;
