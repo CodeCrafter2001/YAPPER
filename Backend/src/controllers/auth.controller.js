@@ -96,7 +96,7 @@ return res.status(200).json({
     fullName: user.fullName,
     email: user.email,
      profilePic: user.profilePic,
-     message:"user has successfully loged in"
+     message:"User has successfully logged in"
 });
     }catch(error){
       console.error("Login error",error);
@@ -109,10 +109,10 @@ return res.status(200).json({
 export const logout = async  (req,res)=>{
 try{
     res.cookie("jwt", "",{
-        maxAge:7 * 24* 60*60 * 1000,
+        maxAge: 0,
         httpOnly : true,
         sameSite: "strict",
-        secure: process.env.NODE_ENV ==="development" ? false : true,
+        secure: ENV.NODE_ENV !== "development",
     }); 
     return res.status(200).json({ message:"Logged out successfully"});
 }catch(error){
