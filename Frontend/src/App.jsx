@@ -23,9 +23,18 @@ if(isCheckingAuth)  return < PageLoader/>
 
 
     <Routes>
-      <Route path="/" element={authUser ?< ChatPage/> : <Navigate to="/login"/>} />
-      <Route path="/signup" element={!authUser? <SignupPage />: <Navigate to="/"/>} />
-      <Route path="/login" element={!authUser ?<LoginPage /> : <Navigate to="/"/>} />
+      <Route
+        path="/"
+        element={authUser ? <ChatPage /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/signup"
+        element={!authUser ? <SignupPage /> : <Navigate to="/" />}
+      />
+      <Route
+        path="/login"
+        element={!authUser ? <LoginPage /> : <Navigate to="/" />}
+      />
     </Routes>
     <Toaster/>
     </div>
